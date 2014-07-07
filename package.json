@@ -1,0 +1,15 @@
+{
+	"author": "Rudolph-Miller",
+		"name": "tail-watcher",
+		"description": "node library for watching tail of files",
+		"repository": {
+			"type": "git",
+			"url": "git://github.com/Rudolph-Miller/node-tail-watcher"
+		},
+		"main": "tail-watcher",
+		"engines": {
+			"node":"*"
+		},
+		"dependencies": {},
+		"devDependencies": {"coffee-script":"*"}
+}
