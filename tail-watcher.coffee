@@ -1,4 +1,5 @@
 events = require 'events'
+async = require 'async'
 fs = require 'fs'
 
 class TailWatcher extends events.EventEmitter
@@ -15,9 +16,15 @@ class TailWatcher extends events.EventEmitter
   watch: ->
     return if @watching_p
     if fs.watch
-      @watcher = fs.watch @filepath, (event) => @handleWatchEvent event
+      try
+        @watcher = fs.watch @filepath, (event) => @handleWatchEvent event
+      catch error
+        console.log "error caused! can not read #{@filepath}"
     else
-      fs.wathcFile @filepath, (cur, pre) => @handleWatchFileEvent cur, pre
+      try
+        fs.wathcFile @filepath, (cur, pre) => @handleWatchFileEvent cur, pre
+      catch error
+        console.log "error caused! can not read #{@filepath}"
 
   handleWatchEvent: (event) ->
     if event is 'change'
@@ -68,4 +75,28 @@ class TailWatcher extends events.EventEmitter
           for chunk in lines
             @emit 'push', chunk
 
+class FolderWatcher extends events.EventEmitter
+
+  constructor: (@folderpath) ->
+    @files = fs.readdirSync @folderpath
+    async.forEach @files, (file) =>
+      (new TailWatcher @folderpath + file).on 'push', (data) =>
+        @emit 'push', {file: @folderpath+file, data: data}
+    @watchFolder()
+
+  watchFolder: ->
+    if fs.watch
+      fs.watch @folderpath, (event) => @handleEvent()
+    else
+      fs.wathcFile @folderpath, (cur, pre) => @handleEvent()
+
+  handleEvent: ->
+    files = fs.readdirSync(@folderpath)
+    for file in files
+      unless file in @files
+        @files.push file
+        (new TailWatcher @folderpath + file).on 'push', (data) =>
+          @emit 'push', {file: @folderpath+file, data: data}
+
 exports.TailWatcher = TailWatcher
+exports.FolderWatcher = FolderWatcher
