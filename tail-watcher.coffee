@@ -73,7 +73,7 @@ class TailWatcher extends events.EventEmitter
           lines = @buffer.trim().split '\n'
           @buffer = ''
           for chunk in lines
-            @emit 'push', chunk
+            @emit 'push', {file: @filepath, data: chunk}
 
 class FolderWatcher extends events.EventEmitter
 
@@ -81,7 +81,7 @@ class FolderWatcher extends events.EventEmitter
     @files = fs.readdirSync @folderpath
     async.forEach @files, (file) =>
       (new TailWatcher @folderpath + file).on 'push', (data) =>
-        @emit 'push', {file: @folderpath+file, data: data}
+        @emit 'push', data
     @watchFolder()
 
   watchFolder: ->
@@ -93,10 +93,10 @@ class FolderWatcher extends events.EventEmitter
   handleEvent: ->
     files = fs.readdirSync(@folderpath)
     for file in files
-      unless file in @files
+      if @files.indexOf(file) == -1
         @files.push file
         (new TailWatcher @folderpath + file).on 'push', (data) =>
-          @emit 'push', {file: @folderpath+file, data: data}
+          @emit 'push', data
 
 exports.TailWatcher = TailWatcher
 exports.FolderWatcher = FolderWatcher
