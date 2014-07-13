@@ -1,15 +1,21 @@
 {
 	"author": "Rudolph-Miller",
-		"name": "tail-watcher",
-		"description": "node library for watching tail of files",
-		"repository": {
-			"type": "git",
-			"url": "git://github.com/Rudolph-Miller/node-tail-watcher"
-		},
-		"main": "tail-watcher",
-		"engines": {
-			"node":"*"
-		},
-		"dependencies": {},
-		"devDependencies": {"coffee-script":"*"}
+	"name": "tail-watcher",
+	"version": "1.0.1",
+	"keywords": ["tail", "log"],
+	"description": "node library for watching tail of files",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/Rudolph-Miller/node-tail-watcher"
+	},
+	"scripts": {
+		"prepublish": "coffee -o lib/ -c src/*.coffee",
+		"build": "coffee -o lib/ -c src/*.coffee"
+	},
+	"main": "lib/tail-watcher.js",
+	"engines": {
+		"node":"*"
+	},
+	"dependencies": {},
+	"devDependencies": {"coffee-script":"*"}
 }
