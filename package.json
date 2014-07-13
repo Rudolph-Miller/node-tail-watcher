@@ -1,7 +1,7 @@
 {
 	"author": "Rudolph-Miller",
 	"name": "tail-watcher",
-	"version": "1.0.1",
+	"version": "1.0.3",
 	"keywords": ["tail", "log"],
 	"description": "node library for watching tail of files",
 	"repository": {

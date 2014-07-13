@@ -78,7 +78,7 @@ class TailWatcher extends events.EventEmitter
 class FolderWatcher extends events.EventEmitter
 
   constructor: (@folderpath) ->
-    @folderpath + '/' if @folderpath[@folderpath.length-1] != '/'
+    @folderpath += '/' if @folderpath[@folderpath.length-1] != '/'
     @files = fs.readdirSync @folderpath
     async.forEach @files, (file) =>
       (new TailWatcher @folderpath + file).on 'push', (data) =>
