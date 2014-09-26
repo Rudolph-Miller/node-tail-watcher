@@ -22,3 +22,5 @@ How to Use
 	* watcher folder and emit events if files in it have changed 
 	* emit 'push', (data) -> console.log data
 	* emit 'error', (err) -> console.log err
+
+Please fork it and send me PR.
